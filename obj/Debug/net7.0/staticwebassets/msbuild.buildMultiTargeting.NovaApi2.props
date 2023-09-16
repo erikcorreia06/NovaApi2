@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\NovaApi2.props" />
+</Project>
