@@ -11,8 +11,8 @@ using NovaApi2.Data.UsuarioDbContext;
 namespace NovaApi2.Migrations
 {
     [DbContext(typeof(UsuarioDbContext))]
-    [Migration("20230902163325_Initial Migration")]
-    partial class InitialMigration
+    [Migration("20230916160221_MyApp")]
+    partial class MyApp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

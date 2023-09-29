@@ -1,97 +1,80 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using NovaApi2.Models;
-using NovaApi2.Data.UsuarioDbContext;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using NovaApi2.Models.Domain.Usuario;
+using NovaApi2.Repository;
+using System;
 
-[Route("api/[controller]")]
-[ApiController]
-public class UsuariosController : ControllerBase
+namespace NovaApi2.Controllers
 {
-    private readonly UsuarioDbContext _context;
-
-    public UsuariosController(UsuarioDbContext context)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UsuariosController : ControllerBase
     {
-        _context = context;
-    }
+        private readonly IUsuarioRepository _usuario;
 
-    // GET: api/Usuarios
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
-    {
-        return await _context.Usuarios.ToListAsync();
-    }
-
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Usuario>> GetUsuario(int id)
-    {
-        var usuario = await _context.Usuarios.FindAsync(id);
-
-        if (usuario == null)
+        public UsuariosController(IUsuarioRepository usuarioRepository)
         {
-            return NotFound();
+            _usuario = usuarioRepository;
         }
 
-        return usuario;
-    }
-
-    [HttpPost]
-    public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
-    {
-        _context.Usuarios.Add(usuario);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetUsuario), new { id = usuario.Id }, usuario);
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> PutUsuario(int id, Usuario usuario)
-    {
-        if (id != usuario.Id)
+        [HttpGet]
+        public IActionResult Get()
         {
-            return BadRequest();
+            var usuarios = _usuario.Get();
+            return Ok(usuarios);
         }
 
-        _context.Entry(usuario).State = EntityState.Modified;
-
-        try
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
         {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!UsuarioExists(id))
+            var usuario = _usuario.GetById(id);
+            if (usuario == null)
             {
                 return NotFound();
             }
-            else
-            {
-                throw;
-            }
+            return Ok(usuario);
         }
 
-        return NoContent();
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUsuario(int id)
-    {
-        var usuario = await _context.Usuarios.FindAsync(id);
-        if (usuario == null)
+        [HttpPost]
+        public IActionResult Post([FromBody] Usuario usuario)
         {
-            return NotFound();
+            if (usuario == null)
+            {
+                return BadRequest("Usuário inválido");
+            }
+
+            _usuario.Add(usuario);
+            return CreatedAtAction(nameof(GetById), new { id = usuario.Id }, usuario);
         }
 
-        _context.Usuarios.Remove(usuario);
-        await _context.SaveChangesAsync();
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody] Usuario usuario)
+        {
+            if (usuario == null || usuario.Id != id)
+            {
+                return BadRequest("Dados inválidos");
+            }
 
-        return NoContent();
-    }
+            var usuarioExistente = _usuario.GetById(id);
+            if (usuarioExistente == null)
+            {
+                return NotFound();
+            }
 
-    private bool UsuarioExists(int id)
-    {
-        return _context.Usuarios.Any(e => e.Id == id);
+            _usuario.Update(usuario);
+            return Ok(usuario);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var usuarioExistente = _usuario.GetById(id);
+            if (usuarioExistente == null)
+            {
+                return NotFound();
+            }
+
+            _usuario.Delete(usuarioExistente);
+            return NoContent();
+        }
     }
 }

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NovaApi2", "NovaApi2.csproj", "{D86550FB-CF42-4CDD-84C7-0C4158757D7F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D86550FB-CF42-4CDD-84C7-0C4158757D7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D86550FB-CF42-4CDD-84C7-0C4158757D7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D86550FB-CF42-4CDD-84C7-0C4158757D7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D86550FB-CF42-4CDD-84C7-0C4158757D7F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C313F731-7C5F-4C97-B2C7-0201EA1FB63B}
+	EndGlobalSection
+EndGlobal

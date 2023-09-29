@@ -1,5 +1,5 @@
-using NovaApi2.Models;
 using Microsoft.EntityFrameworkCore;
+using NovaApi2.Models.Domain.Usuario;
 
 namespace NovaApi2.Data.UsuarioDbContext
 {
@@ -7,6 +7,7 @@ namespace NovaApi2.Data.UsuarioDbContext
     {
 
         public DbSet<Usuario> Usuarios { get; set; }
+
         public UsuarioDbContext(DbContextOptions<UsuarioDbContext> options)
             : base(options)
         {
