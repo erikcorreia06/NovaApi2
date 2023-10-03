@@ -9,7 +9,7 @@ using NovaApi2.Data.UsuarioDbContext;
 
 namespace NovaApi2.Migrations
 {
-    [DbContext(typeof(UsuarioDbContext))]
+    [DbContext(typeof(AppDbContext))]
     partial class UsuarioDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

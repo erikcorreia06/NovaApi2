@@ -3,12 +3,12 @@ using NovaApi2.Models.Domain.Usuario;
 
 namespace NovaApi2.Data.UsuarioDbContext
 {
-    public class UsuarioDbContext : DbContext
+    public class AppDbContext : DbContext
     {
 
         public DbSet<Usuario> Usuarios { get; set; }
 
-        public UsuarioDbContext(DbContextOptions<UsuarioDbContext> options)
+        public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
         }

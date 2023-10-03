@@ -9,11 +9,11 @@ using System.Linq.Expressions;
 
 namespace DataAccess.Repository
 {
-    public class UsuarioRepository : IUsuarioRepository
+    public class UsuarioRepository : IRepository<Usuario>, IUsuarioRepository
     {
-        private readonly UsuarioDbContext _context;
+        private readonly AppDbContext _context;
 
-        public UsuarioRepository(UsuarioDbContext context)
+        public UsuarioRepository(AppDbContext context)
         {
             _context = context;
         }
@@ -24,17 +24,16 @@ namespace DataAccess.Repository
             _context.SaveChanges();
         }
 
-        public void Delete(Usuario entity)
-        {
-            _context.Usuarios.Remove(entity);
-            _context.SaveChanges();
-        }
-
         public IEnumerable<Usuario> Get()
         {
             return _context.Usuarios.AsEnumerable();
         }
 
+        public void Delete(Usuario entity)
+        {
+            _context.Usuarios.Remove(entity);
+            _context.SaveChanges();
+        }
         public IEnumerable<Usuario> Get(Expression<Func<Usuario, bool>> predicate)
         {
             return _context.Usuarios.Where(predicate).AsEnumerable();
@@ -49,6 +48,11 @@ namespace DataAccess.Repository
         {
             _context.Entry(entity).State = EntityState.Modified;
             _context.SaveChanges();
+        }
+
+        public Usuario GetById(Expression<Func<Usuario, bool>> predicate)
+        {
+            throw new NotImplementedException();
         }
     }
 }

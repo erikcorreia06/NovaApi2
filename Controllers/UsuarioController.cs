@@ -2,78 +2,79 @@ using Microsoft.AspNetCore.Mvc;
 using NovaApi2.Models.Domain.Usuario;
 using NovaApi2.Repository;
 using System;
+using System.Linq.Expressions;
 
 namespace NovaApi2.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class UsuariosController : ControllerBase
+    [Route("api/[controller]")]
+    public class UsuarioController : ControllerBase
     {
-        private readonly IUsuarioRepository _usuario;
+        private readonly IUsuarioRepository _usuarioRepository;
 
-        public UsuariosController(IUsuarioRepository usuarioRepository)
+        public UsuarioController(IUsuarioRepository usuarioRepository)
         {
-            _usuario = usuarioRepository;
+            _usuarioRepository = usuarioRepository;
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetUsuarios()
         {
-            var usuarios = _usuario.Get();
+            var usuarios = _usuarioRepository.Get();
             return Ok(usuarios);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public IActionResult GetUsuarioById(int id)
         {
-            var usuario = _usuario.GetById(id);
+            var usuario = _usuarioRepository.GetById(id);
+
             if (usuario == null)
             {
                 return NotFound();
             }
+
             return Ok(usuario);
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Usuario usuario)
+        public IActionResult AddUsuario(Usuario usuario)
         {
-            if (usuario == null)
-            {
-                return BadRequest("Usuário inválido");
-            }
-
-            _usuario.Add(usuario);
-            return CreatedAtAction(nameof(GetById), new { id = usuario.Id }, usuario);
+            _usuarioRepository.Add(usuario);
+            return CreatedAtAction(nameof(GetUsuarioById), new { id = usuario.Id }, usuario);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Usuario usuario)
+        public IActionResult UpdateUsuario(int id, Usuario usuario)
         {
-            if (usuario == null || usuario.Id != id)
+            if (id != usuario.Id)
             {
-                return BadRequest("Dados inválidos");
+                return BadRequest();
             }
 
-            var usuarioExistente = _usuario.GetById(id);
-            if (usuarioExistente == null)
+            try
+            {
+                _usuarioRepository.Update(usuario);
+            }
+            catch (Exception)
             {
                 return NotFound();
             }
 
-            _usuario.Update(usuario);
-            return Ok(usuario);
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult DeleteUsuario(int id)
         {
-            var usuarioExistente = _usuario.GetById(id);
-            if (usuarioExistente == null)
+            var usuario = _usuarioRepository.GetById(id);
+
+            if (usuario == null)
             {
                 return NotFound();
             }
 
-            _usuario.Delete(usuarioExistente);
+            _usuarioRepository.Delete(usuario);
             return NoContent();
         }
     }

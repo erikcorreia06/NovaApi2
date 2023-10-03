@@ -10,7 +10,7 @@ using NovaApi2.Data.UsuarioDbContext;
 
 namespace NovaApi2.Migrations
 {
-    [DbContext(typeof(UsuarioDbContext))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20230916160221_MyApp")]
     partial class MyApp
     {
