@@ -3,7 +3,7 @@ using NovaApi2.Models.Domain.Usuario;
 using NovaApi2.Repository;
 using System;
 using System.Linq.Expressions;
-
+// usuarioooss
 namespace NovaApi2.Controllers
 {
     [ApiController]
