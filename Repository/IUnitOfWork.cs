@@ -9,7 +9,8 @@ namespace NovaApi2.Repository
 {
     public interface IUnitOfWork
     {
-        IRepository<Usuario> ClienteRepository { get; }
         void Commit();
+
+        void Rollback();
     }
 }

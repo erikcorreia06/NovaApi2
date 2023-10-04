@@ -8,31 +8,22 @@ using NovaApi2.Models.Domain.Usuario;
 
 namespace NovaApi2.Repository
 {
-    public class UnitOfWork : IUnitOfWork, IDisposable
+    public class UnitOfWork : IUnitOfWork
     {
-        public AppDbContext _context;
-        private Repository<Usuario> _usarioRepository;
+        private readonly AppDbContext _context;
+
         public UnitOfWork(AppDbContext context)
         {
             _context = context;
         }
-        public IRepository<Usuario> UsuarioRepository
-        {
-            get
-            {
-                return _usarioRepository = _usarioRepository ?? new Repository<Usuario>(_context);
-            }
-        }
-
-        public IRepository<Usuario> ClienteRepository => throw new NotImplementedException();
-
         public void Commit()
         {
             _context.SaveChanges();
         }
-        public void Dispose()
+
+        public void Rollback()
         {
-            _context.Dispose();
+
         }
     }
 }

@@ -11,10 +11,12 @@ namespace NovaApi2.Controllers
     public class UsuarioController : ControllerBase
     {
         private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UsuarioController(IUsuarioRepository usuarioRepository)
+        public UsuarioController(IUsuarioRepository usuarioRepository, IUnitOfWork unitOfWork)
         {
             _usuarioRepository = usuarioRepository;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
@@ -40,8 +42,18 @@ namespace NovaApi2.Controllers
         [HttpPost]
         public IActionResult AddUsuario(Usuario usuario)
         {
-            _usuarioRepository.Add(usuario);
-            return CreatedAtAction(nameof(GetUsuarioById), new { id = usuario.Id }, usuario);
+            try
+            {
+                _usuarioRepository.Add(usuario);
+                _unitOfWork.Commit();
+
+                return CreatedAtAction(nameof(GetUsuarioById), new { id = usuario.Id }, usuario);
+            }
+            catch (Exception)
+            {
+                _unitOfWork.Rollback();
+                return StatusCode(500, "Ocorreu um erro ao adicionar o usuário.");
+            }
         }
 
         [HttpPut("{id}")]
@@ -55,13 +67,15 @@ namespace NovaApi2.Controllers
             try
             {
                 _usuarioRepository.Update(usuario);
+                _unitOfWork.Commit();
+
+                return NoContent();
             }
             catch (Exception)
             {
-                return NotFound();
+                _unitOfWork.Rollback();
+                return StatusCode(500, "Ocorreu um erro ao atualizar o usuário.");
             }
-
-            return NoContent();
         }
 
         [HttpDelete("{id}")]
@@ -74,8 +88,18 @@ namespace NovaApi2.Controllers
                 return NotFound();
             }
 
-            _usuarioRepository.Delete(usuario);
-            return NoContent();
+            try
+            {
+                _usuarioRepository.Delete(usuario);
+                _unitOfWork.Commit();
+
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                _unitOfWork.Rollback();
+                return StatusCode(500, "Ocorreu um erro ao excluir o usuário.");
+            }
         }
     }
 }
