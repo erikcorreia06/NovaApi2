@@ -11,13 +11,17 @@ namespace DataAccess.Repository
 {
     public class UsuarioRepository : Repository<Usuario>, IUsuarioRepository
     {
+
+        private readonly AppDbContext _context;
         public UsuarioRepository(AppDbContext context) : base(context)
         {
+            _context = context;
         }
 
         public Usuario GetById(int id)
         {
-            throw new NotImplementedException();
+            return _context.Usuarios.FirstOrDefault(x => x.Id == id);
         }
+
     }
 }
