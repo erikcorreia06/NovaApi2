@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using NovaApi2.Data.Dto;
 using NovaApi2.Models.Domain.Usuario;
 using NovaApi2.Repository;
 using System;
 using System.Linq.Expressions;
+using AutoMapper;
 // usuarioooss
 namespace NovaApi2.Controllers
 {
@@ -12,11 +14,14 @@ namespace NovaApi2.Controllers
     {
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        
 
         public UsuarioController(IUsuarioRepository usuarioRepository, IUnitOfWork unitOfWork)
         {
             _usuarioRepository = usuarioRepository;
             _unitOfWork = unitOfWork;
+            
         }
 
         [HttpGet]
@@ -40,10 +45,11 @@ namespace NovaApi2.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddUsuario(Usuario usuario)
+        public IActionResult AddUsuario([FromBody]CreateUsuarioDto  usuarioDto)
         {
             try
             {
+                Usuario usuario = _mapper.Map<Usuario>(usuarioDto);
                 _usuarioRepository.Add(usuario);
                 _unitOfWork.Commit();
 
