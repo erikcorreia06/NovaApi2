@@ -17,10 +17,11 @@ namespace NovaApi2.Controllers
         private readonly IMapper _mapper;
         
 
-        public UsuarioController(IUsuarioRepository usuarioRepository, IUnitOfWork unitOfWork)
+        public UsuarioController(IUsuarioRepository usuarioRepository, IUnitOfWork unitOfWork,IMapper mapper)
         {
             _usuarioRepository = usuarioRepository;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
             
         }
 
